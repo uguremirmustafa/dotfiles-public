@@ -1,1 +1,1 @@
-sudo apt install stow zsh wget curl vim
+sudo dnf install stow zsh wget curl vim stow neovim 
