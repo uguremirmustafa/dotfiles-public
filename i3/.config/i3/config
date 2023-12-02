@@ -1,0 +1,321 @@
+# mod key as windows key, Mod1 -> alt
+set $mod Mod4
+
+# workspace variables
+set $workspace1 1
+set $workspace2 2
+set $workspace3 3
+set $workspace4 4
+set $workspace5 5
+set $workspace6 6
+set $workspace7 7
+set $workspace8 8
+set $workspace9 9
+set $workspace10 10
+
+set $mon1 DP-1-2-2
+set $mon2 DP-1-1
+set $mon3 eDP-1
+
+# assign workspaces to a specific monitor
+workspace $workspace1 output $mon1
+workspace $workspace2 output $mon2
+workspace $workspace3 output $mon2
+workspace $workspace4 output $mon2
+workspace $workspace5 output $mon2
+workspace $workspace6 output $mon2
+workspace $workspace7 output $mon2
+workspace $workspace8 output $mon1
+workspace $workspace9 output $mon1
+workspace $workspace10 output $mon3
+
+
+# switch to workspace
+bindsym $mod+1 workspace $workspace1
+bindsym $mod+2 workspace $workspace2
+bindsym $mod+3 workspace $workspace3
+bindsym $mod+4 workspace $workspace4
+bindsym $mod+5 workspace $workspace5
+bindsym $mod+6 workspace $workspace6
+bindsym $mod+7 workspace $workspace7
+bindsym $mod+8 workspace $workspace8
+bindsym $mod+9 workspace $workspace9
+bindsym $mod+0 workspace $workspace10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace $workspace1; workspace $workspace1
+bindsym $mod+Shift+2 move container to workspace $workspace2; workspace $workspace2
+bindsym $mod+Shift+3 move container to workspace $workspace3; workspace $workspace3
+bindsym $mod+Shift+4 move container to workspace $workspace4; workspace $workspace4
+bindsym $mod+Shift+5 move container to workspace $workspace5; workspace $workspace5
+bindsym $mod+Shift+6 move container to workspace $workspace6; workspace $workspace6
+bindsym $mod+Shift+7 move container to workspace $workspace7; workspace $workspace7
+bindsym $mod+Shift+8 move container to workspace $workspace8; workspace $workspace8
+bindsym $mod+Shift+9 move container to workspace $workspace9; workspace $workspace9
+bindsym $mod+Shift+0 move container to workspace $workspace10; workspace $workspace10
+
+# start rofi
+bindsym $mod+r exec --no-startup-id rofi -show drun
+bindsym $mod+p exec --no-startup-id bash ~/.scripts/powermenu
+bindsym $mod+Shift+x exec --no-startup-id bash ~/.scripts/rofi-ximmio
+bindsym $mod+a exec --no-startup-id bash ~/.scripts/rofi-audio 
+bindsym $mod+n exec --no-startup-id bash ~/.scripts/rofi-beats
+bindsym $mod+i exec --no-startup-id rofimoji --no-frecency -a copy 
+bindsym $mod+o exec --no-startup-id bash ~/.scripts/rofi-env-launcher
+
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+
+# reload the configuration file
+bindsym $mod+Shift+c exec i3-msg exit
+
+# kill focused window
+bindsym $mod+Shift+q kill
+bindsym $mod+q kill
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# toggle tiling / floating
+bindsym $mod+space floating toggle
+
+# focus window
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# move window
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# next/previous workspace
+bindsym $mod+Tab workspace next
+bindsym $mod+Shift+Tab workspace prev
+
+#navigate workspaces next / previous with pageup and pagedown
+bindsym $mod+Next workspace next
+bindsym $mod+Prior workspace prev
+
+# switch to workspace with urgent window automatically
+# for_window [urgent=latest] focus
+
+# orientation for new workspaces
+default_orientation horizontal
+
+# resize windows
+bindsym $mod+Control+Right resize shrink width 150 px or 150 ppt
+bindsym $mod+Control+Up resize grow height 150 px or 150 ppt
+bindsym $mod+Control+Down resize shrink height 150 px or 150 ppt
+bindsym $mod+Control+Left resize grow width 150 px or 150 ppt
+bindsym $mod+Control+r mode "resize"
+
+mode "resize" {
+    # These bindings trigger as soon as you enter the resize mode
+    bindsym j           resize shrink width 10 px or 10 ppt
+    bindsym k           resize grow height 10 px or 10 ppt
+    bindsym l           resize shrink height 10 px or 10 ppt
+    bindsym semicolon   resize grow width 10 px or 10 ppt
+
+    # same bindings, but for the arrow keys
+    bindsym Left        resize shrink width 10 px or 10 ppt
+    bindsym Down        resize grow height 10 px or 10 ppt
+    bindsym Up          resize shrink height 10 px or 10 ppt
+    bindsym Right       resize grow width 10 px or 10 ppt
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+# choose your font for window titles
+font pango:Source Code Pro Black 12
+
+
+# assign application to start on a specific workspace
+# class based assignments
+assign [class="Chromium|Google-chrome|Brave-browser|Firefox|firefox"] → $workspace1
+assign [class="figma-linux|'VirtualBox Manager'"] → $workspace4
+assign [class="Skype|Microsoft Teams|Microsoft Teams - Brave|teams-for-linux"] → $workspace5
+assign [class="TelegramDesktop|zoom|Postman|Spotify"] → $workspace10
+assign [class="keepassxc|Simplenote|KeePassXC"] → $workspace9
+assign [class="DBeaver"] → $workspace8
+assign [class="obsidian"] → $workspace3
+assign [class="org.remmina.Remmina"] → $workspace7
+
+# title based assignments
+# these are set in .vscode/settings/window.title
+assign [title="devugur-fullstack"] → $workspace7
+assign [title="radio-mpv"] → $workspace14
+
+# auto-start some applications
+# autotiling
+exec_always --no-startup-id autotiling
+
+# gnome keyring
+exec_always --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=ssh,secrets,pkcs11 &
+
+# mount disks
+exec --no-startup-id udiskie &
+exec_always --no-startup-id ~/.screenlayout/triple.sh
+exec_always --no-startup-id setxkbmap us
+exec_always --no-startup-id ~/.fehbg
+exec_always --no-startup-id picom
+
+exec --no-startup-id flatpak run com.dropbox.Client
+exec --no-startup-id dex -va --search-paths ~/.config/autostart
+
+# dunst
+exec_always --no-startup-id /usr/bin/dunst -conf "~/.config/dunst/dunstrc" &
+
+# application shortcuts
+
+bindsym $mod+Return exec --no-startup-id alacritty;focus
+bindsym $mod+w exec --no-startup-id	flatpak run com.brave.Browser --password-store=gnome
+bindsym $mod+Shift+w exec --no-startup-id firefox
+bindsym $mod+e exec --no-startup-id nautilus
+bindsym $mod+d exec --no-startup-id code
+bindsym $mod+Shift+s exec --no-startup-id code ~/.dotfiles
+bindsym $mod+Shift+g exec --no-startup-id glava
+bindsym $mod+g exec --no-startup-id gpick --pick 
+
+# xkill
+bindsym --release $mod+Escape exec --no-startup-id xkill
+
+# screenshot
+bindsym $mod+Print exec --no-startup-id maim -i | tee ~/Pictures/$(date +%s).png | xclip -selection clipboard -t image/png
+bindsym --release Print exec --no-startup-id maim -s | tee ~/Pictures/$(date +%s).png | xclip -selection clipboard -t image/png
+
+# floating apps
+for_window [class="Bleachbit"] floating disable
+for_window [class="gdebi-gtk|Gdebi-gtk"] floating enable
+for_window [class="Blueberry.py"] floating enable
+for_window [class="^Gnome-font-viewer$"] floating enable
+for_window [class="^Gpick$"] floating enable
+for_window [class="Gedit|xed|Xed"] floating enable
+for_window [class="Imagewriter"] floating enable
+for_window [class="Font-manager"] floating enable
+for_window [class="feh|htop"] floating enable
+for_window [class="Microsoft Teams"] floating disable
+for_window [class="Nitrogen"] floating disable
+for_window [class="Pavucontrol"] floating disable
+for_window [class="Peek"] floating enable
+for_window [class="^Skype$"] floating disable
+for_window [class="^Spotify$"] floating disable
+for_window [class="^Vlc$"] floating disable
+for_window [class="Wine"] floating disable
+for_window [class="Xfburn"] floating disable
+for_window [title="Copying"] floating enable
+for_window [title="Deleting"] floating enable
+for_window [title="Moving"] floating enable
+for_window [title="^Terminator Preferences$"] floating enable
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="^Preferences$"] floating enable
+for_window [window_role="setup"] floating enable
+
+# focused apps
+for_window [title="cmus-music-player"] focus
+for_window [class="Brave-browser"] focus
+for_window [class="Rhythmbox"] focus
+
+# audio settings
+bindsym XF86AudioRaiseVolume exec --no-startup-id bash ~/.scripts/volume-dunst.sh '5%+'
+bindsym XF86AudioLowerVolume exec --no-startup-id bash ~/.scripts/volume-dunst.sh '5%-'
+bindsym XF86AudioMute exec --no-startup-id "amixer -D pulse set Master toggle"
+# https://github.com/acrisci/playerctl/
+bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
+bindsym XF86AudioNext exec --no-startup-id playerctl next
+bindsym XF86AudioPrev exec --no-startup-id playerctl previous
+bindsym XF86AudioStop exec --no-startup-id playerctl stop
+
+# brightness
+# bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 20 # increase screen brightness
+# bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 20 # decrease screen brightness
+
+# increase/decrease keyboard brightness
+bindsym XF86KbdBrightnessUp exec --no-startup-id ~/.scripts/brightness.sh up
+bindsym XF86KbdBrightnessDown exec --no-startup-id ~/.scripts/brightness.sh down 
+
+
+# border control
+# hide_edge_borders smart
+
+# border-toggle
+# bindsym $mod+shift+b exec --no-startup-id i3-msg border toggle
+
+# new_window borders none|normal
+new_window none
+new_float none
+
+# popups during fullscreen mode
+popup_during_fullscreen smart
+
+# gaps
+for_window [class="^.*"] border pixel 2
+gaps inner 8
+gaps outer 0
+# gaps bottom 0
+# gaps top 0
+# smart_gaps on
+# smart_borders on
+
+# compton
+# exec_always --no-startup-id compton --config ~/.config/compton/compton.conf
+
+# solarized colors
+set $main #689d6a
+set $dark #282828
+set $yellow #B58A00
+set $red #cc241d
+set $grey #7c6f64
+set $pink #458588
+set $purple #b16286
+set $green #98971a 
+set $white #fbf1c7
+
+
+
+# class                 border  backgr. text    indic   child_border
+client.focused          $main   $main   $white  $main   $main
+client.focused_inactive $dark   $main   $white  $dark   $dark
+client.unfocused        $dark   $main   $white  $dark   $dark
+client.urgent           $red    $main   $white  $red    $red
+client.placeholder      $purple $main   $white  $purple $purple
+
+client.background       $main
+
+# disables mouse focusing
+focus_follows_mouse yes
+# https://github.com/i3/i3/issues/3518
+mouse_warping none
+
+# change keyboard layout
+bindsym $mod+t exec --no-startup-id setxkbmap tr
+bindsym $mod+u exec --no-startup-id setxkbmap us
+
+# enable touch to click
+# read this for more info: https://www.reddit.com/r/i3wm/comments/516e8c/comment/d79onal/?utm_source=share&utm_medium=web2x&context=3
+exec --no-startup-id xinput set-prop "Elan Touchpad" "libinput Tapping Enabled" 1
+
+# i3bar config
+bar {
+    padding 4px 0
+    separator_symbol "|"
+    i3bar_command i3bar --transparency
+    status_command i3status -c ~/.config/i3/i3status.conf --transparency
+    workspace_min_width 30
+    tray_output $mon2
+    tray_padding 5
+    bindsym --release button3 exec --no-startup-id import /tmp/latest-screenshot.png
+    font pango: Ubuntu Semibold 10
+    colors {
+        background #282828b5
+        separator $grey
+        focused_workspace  $main $main $dark
+        active_workspace $grey $grey $white
+        inactive_workspace $grey $grey $white
+        urgent_workspace $red $red $dark
+    }
+}
